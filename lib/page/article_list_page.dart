@@ -39,6 +39,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
   Widget build(BuildContext context) {
     return new EasyRefresh(
       child: ListView.builder(
+        padding: new EdgeInsets.symmetric(vertical: 5),
         itemBuilder: (context, index) {
           return _item(_list[index]);
         },
