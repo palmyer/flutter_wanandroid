@@ -7,7 +7,7 @@ part 'article_model.g.dart';
 @JsonSerializable()
 class ArticleModel {
   @JsonKey(ignore: true)
-  bool top = true;
+  bool top = false;
   String apkLink;
   int audit;
   String author;

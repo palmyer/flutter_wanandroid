@@ -1,15 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:wanandroid/http/http.dart';
-import 'package:wanandroid/model/article_model.dart';
+import 'package:wanandroid/model/banner_model.dart';
 import 'package:wanandroid/page/article_list_page.dart';
-
-enum HOME_TYPE {
-  ARTICLE_LIST,
-  ARTICLE_TOP,
-  PROJECT_LIST,
-}
 
 class HomePage extends StatefulWidget {
   @override
@@ -20,7 +14,7 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   TabController _controller;
   List<String> _listTitle = [];
-  List<ArticleModel> _listArticle = [];
+  List<BannerModel> _listBanner = [];
   bool _switch = true;
 
   @override
@@ -36,48 +30,42 @@ class _HomePageState extends State<HomePage>
       drawer: new Drawer(
         child: new Text("data"),
       ),
-      body: new EasyRefresh.builder(
-        builder: (context, physics, header, footer) {
-          return new CustomScrollView(
-            physics: physics,
-            slivers: <Widget>[
-              _appbar(),
-              header,
-              new SliverFillRemaining(
-                child: TabBarView(
-                  controller: _controller,
-                  children: <Widget>[
-                    new ArticleListPage(_listArticle, physics),
-                    Center(child: Text('Content of Profile')),
-                  ],
-                ),
-              ),
-//              footer,
+      body: new NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            // These are the slivers that show up in the "outer" scroll view.
+            return <Widget>[
+              _appbar(innerBoxIsScrolled),
+            ];
+          },
+          body: new TabBarView(
+            controller: _controller,
+            children: <Widget>[
+              new ArticleListPage(
+                  _switch ? HOME_TYPE.ARTICLE_TOP : HOME_TYPE.ARTICLE_LIST,
+                  () => getBannerList()),
+              new ArticleListPage(
+                  HOME_TYPE.PROJECT_LIST, () => getBannerList()),
             ],
-          );
-        },
-        onRefresh: ()async{
-          Http()
-              .getArticleTop()
-              .then((value) => _listArticle.addAll(value))
-              .then((value) => setState(() {}));
-        },
-      ),
+          )),
     );
   }
 
-  Widget _appbar() {
+  Widget _appbar(bool innerBoxIsScrolled) {
     return new SliverAppBar(
       title: new Text("首页"),
       centerTitle: true,
+      forceElevated: innerBoxIsScrolled,
       actions: <Widget>[
         new Center(
           child: new Text("置顶"),
         ),
         new Switch(
           value: _switch,
-          onChanged: (value){
-
+          activeColor: Colors.white,
+          onChanged: (value) {
+            setState(() {
+              _switch = value;
+            });
           },
         ),
       ],
@@ -85,9 +73,18 @@ class _HomePageState extends State<HomePage>
       floating: false,
       pinned: true,
       snap: false,
-//      flexibleSpace: new FlexibleSpaceBar(
-//        title: new Text("space"),
-//      ),
+      flexibleSpace: new FlexibleSpaceBar(
+        background: new Swiper(
+          itemBuilder: (context, index) {
+            return new Image.network(
+              _listBanner[index].imagePath,
+              fit: BoxFit.cover,
+            );
+          },
+          itemCount: _listBanner.length,
+          autoplay: true,
+        ),
+      ),
       bottom: new TabBar(
           controller: _controller,
           tabs: _listTitle
@@ -98,10 +95,12 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  getArticleTop() async {
-    return Http()
-        .getArticleTop()
-        .then((value) => _listArticle.addAll(value))
-        .then((value) => setState(() {}));
+  getBannerList() {
+    if (_listBanner.length == 0) {
+      Http()
+          .getBannerList()
+          .then((value) => _listBanner.addAll(value))
+          .then((value) => setState(() {}));
+    }
   }
 }

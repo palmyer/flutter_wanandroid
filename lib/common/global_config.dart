@@ -9,4 +9,7 @@ class GlobalConfig {
   static const fontSize_title = 16.0;
   static const fontSize_content = 14.0;
   static const fontSize_mark = 12.0;
+
+  //列表开始页
+  static const PAGE_START = 0;
 }
