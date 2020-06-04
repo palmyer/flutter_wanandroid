@@ -6,6 +6,8 @@ part 'article_model.g.dart';
 //flutter packages pub run build_runner build
 @JsonSerializable()
 class ArticleModel {
+  @JsonKey(ignore: true)
+  bool top = true;
   String apkLink;
   int audit;
   String author;

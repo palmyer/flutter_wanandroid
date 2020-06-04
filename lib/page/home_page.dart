@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:wanandroid/http/http.dart';
+import 'package:wanandroid/model/article_model.dart';
+import 'package:wanandroid/page/article_list_page.dart';
 
 enum HOME_TYPE {
   ARTICLE_LIST,
@@ -17,7 +19,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   TabController _controller;
-  List _listTitle = [];
+  List<String> _listTitle = [];
+  List<ArticleModel> _listArticle = [];
+  bool _switch = true;
 
   @override
   void initState() {
@@ -43,7 +47,7 @@ class _HomePageState extends State<HomePage>
                 child: TabBarView(
                   controller: _controller,
                   children: <Widget>[
-                    Center(child: Text('Content of Home')),
+                    new ArticleListPage(_listArticle, physics),
                     Center(child: Text('Content of Profile')),
                   ],
                 ),
@@ -52,7 +56,12 @@ class _HomePageState extends State<HomePage>
             ],
           );
         },
-        onRefresh: getArticleTopList,
+        onRefresh: ()async{
+          Http()
+              .getArticleTop()
+              .then((value) => _listArticle.addAll(value))
+              .then((value) => setState(() {}));
+        },
       ),
     );
   }
@@ -66,8 +75,10 @@ class _HomePageState extends State<HomePage>
           child: new Text("置顶"),
         ),
         new Switch(
-          value: false,
-          onChanged: null,
+          value: _switch,
+          onChanged: (value){
+
+          },
         ),
       ],
       expandedHeight: 200,
@@ -86,9 +97,11 @@ class _HomePageState extends State<HomePage>
               .toList()),
     );
   }
-  getArticleTopList()async{
-    Http().getArticleTop()
-        .then((value) => null)
-        .whenComplete(() => null);
+
+  getArticleTop() async {
+    return Http()
+        .getArticleTop()
+        .then((value) => _listArticle.addAll(value))
+        .then((value) => setState(() {}));
   }
 }
