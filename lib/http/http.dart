@@ -37,6 +37,12 @@ class Http {
     return await checkResult(
         response, (element) => ArticleModel.fromJson(element));
   }
+  //置顶文章
+  Future<List<ArticleModel>> getArticleTop() async {
+    Response response = await _dio.get(API.ARTICLE_TOP);
+    return await checkResult(
+        response, (element) => ArticleModel.fromJson(element));
+  }
 
   Future checkResult<T>(Response response, Format<T> format) {
     String jsonStr = jsonEncode(response.data);

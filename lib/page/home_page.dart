@@ -1,6 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:wanandroid/http/http.dart';
+
+enum HOME_TYPE {
+  ARTICLE_LIST,
+  ARTICLE_TOP,
+  PROJECT_LIST,
+}
 
 class HomePage extends StatefulWidget {
   @override
@@ -45,7 +52,7 @@ class _HomePageState extends State<HomePage>
             ],
           );
         },
-        onRefresh: () async {},
+        onRefresh: getArticleTopList,
       ),
     );
   }
@@ -78,5 +85,10 @@ class _HomePageState extends State<HomePage>
                   ))
               .toList()),
     );
+  }
+  getArticleTopList()async{
+    Http().getArticleTop()
+        .then((value) => null)
+        .whenComplete(() => null);
   }
 }
