@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GlobalConfig {
+  static const color_bg = Color(0xffe8e8e8);
   //字体颜色
   static const color_title = Colors.black;
   static const color_content = Colors.black54;

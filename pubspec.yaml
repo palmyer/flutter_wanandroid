@@ -34,6 +34,8 @@ dependencies:
   json_annotation: ^3.0.1
   flutter_easyrefresh: ^2.1.1
   flutter_swiper : ^1.1.6
+  sticky_headers: ^0.1.8
+  scrollable_positioned_list: ^0.1.6
 
 dev_dependencies:
   flutter_test:

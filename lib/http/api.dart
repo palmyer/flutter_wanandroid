@@ -8,4 +8,5 @@ class API {
   static const BANNER_LIST = 'banner/json';
   static const PROJECT_TREE = 'project/tree/json';
   static const PROJECT_LIST = 'project/list';
+  static const NAVIGATOR_LIST = 'navi/json';
 }

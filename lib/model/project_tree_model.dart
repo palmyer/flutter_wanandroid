@@ -14,7 +14,6 @@ class ProjectTreeModel {
   bool userControlSetTop;
   int visible;
 
-
   ProjectTreeModel(this.children, this.courseId, this.id, this.name, this.order,
       this.parentChapterId, this.userControlSetTop, this.visible);
 

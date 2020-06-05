@@ -7,6 +7,7 @@ import 'package:wanandroid/http/interceptor.dart';
 import 'package:wanandroid/model/article_model.dart';
 import 'package:wanandroid/model/banner_model.dart';
 import 'package:wanandroid/model/base_model.dart';
+import 'package:wanandroid/model/navigator_model.dart';
 import 'package:wanandroid/model/project_tree_model.dart';
 import 'package:wanandroid/model/tree_model.dart';
 
@@ -34,13 +35,6 @@ class Http {
     return await checkResult(
         response, (element) => TreeModel.fromJson(element));
   }
-
-//  //首页文章列表
-//  Future<BaseListModel<ArticleModel>> getArticleList(int page) async {
-//    Response response = await _dio.get('${API.ARTICLE_LIST}/$page/json');
-//    return await checkResult(
-//        response, (element) => ArticleModel.fromJson(element));
-//  }
 
   //最新项目tab (首页的第二个tab)
   Future<BaseListModel<ArticleModel>> getArticleProjectList(int page) async {
@@ -79,18 +73,24 @@ class Http {
         response, (element) => ArticleModel.fromJson(element));
   }
 
+  //导航数据
+  Future<List<NavigatorModel>> getNavigatorList() async {
+    Response response = await _dio.get(API.NAVIGATOR_LIST);
+    return await checkResult(
+        response, (element) => NavigatorModel.fromJson(element));
+  }
 
-  Future<BaseListModel<ArticleModel>> getArticleList(int page, {int cid}) async {
+  Future<BaseListModel<ArticleModel>> getArticleList(int page,
+      {int cid}) async {
     Map<String, dynamic> map = {};
-    if(cid != null){
+    if (cid != null) {
       map['cid'] = cid;
     }
-    Response response = await _dio.get('${API.ARTICLE_LIST}/$page/json', queryParameters: map);
+    Response response = await _dio.get(
+        '${API.ARTICLE_LIST}/$page/json', queryParameters: map);
     return await checkResult(
         response, (element) => ArticleModel.fromJson(element));
   }
-
-
 
 
   Future checkResult<T>(Response response, Format<T> format) {

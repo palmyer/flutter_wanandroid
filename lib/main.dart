@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wanandroid/common/global_config.dart';
 import 'package:wanandroid/page/main_page.dart';
 
 void main() {
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
 
-        scaffoldBackgroundColor: Color(0xffe8e8e8),
+        scaffoldBackgroundColor: GlobalConfig.color_bg,
+        dividerTheme: new DividerThemeData(space: 0),
       ),
       home: new MainPage(),
     );

@@ -4,6 +4,7 @@ import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 
 import 'package:wanandroid/page/home_page.dart';
+import 'package:wanandroid/page/navigator_page.dart';
 import 'package:wanandroid/page/project_page.dart';
 import 'package:wanandroid/page/tree_page.dart';
 
@@ -39,7 +40,7 @@ class _MainPageState extends State<MainPage> {
     _listPage = [
       new HomePage(_key),
       new ProjectPage(),
-      new HomePage(_key),
+      new NavigatorPage(),
       new TreePage(),
       new HomePage(_key),
     ];

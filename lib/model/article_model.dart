@@ -40,7 +40,8 @@ class ArticleModel {
   int visible;
   int zan;
 
-  ArticleModel(
+  ArticleModel({
+      this.top = false,
       this.apkLink,
       this.audit,
       this.author,
@@ -71,7 +72,7 @@ class ArticleModel {
       this.type,
       this.userId,
       this.visible,
-      this.zan);
+      this.zan});
 
   factory ArticleModel.fromJson(Map<String, dynamic> json) =>
       _$ArticleModelFromJson(json);
