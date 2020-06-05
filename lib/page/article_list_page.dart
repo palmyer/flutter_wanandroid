@@ -22,8 +22,9 @@ class ArticleListPage extends StatefulWidget {
   _ArticleListPageState createState() => _ArticleListPageState();
 }
 
-class _ArticleListPageState extends State<ArticleListPage> {
+class _ArticleListPageState extends State<ArticleListPage> with AutomaticKeepAliveClientMixin {
   List<ArticleModel> _list = [];
+  List<ArticleModel> _listTop = [];
   int _page = GlobalConfig.PAGE_START;
   EasyRefreshController _controller;
   int _sizeTop = 0;
@@ -31,12 +32,14 @@ class _ArticleListPageState extends State<ArticleListPage> {
   @override
   void initState() {
     super.initState();
+    print("initState_list");
     _controller = new EasyRefreshController();
     _controller.finishLoad(noMore: true);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return new EasyRefresh(
       child: ListView.builder(
         padding: new EdgeInsets.symmetric(vertical: 5),
@@ -57,7 +60,31 @@ class _ArticleListPageState extends State<ArticleListPage> {
     );
   }
 
-  //list的item
+  @override
+  void didUpdateWidget(ArticleListPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print("change");
+    print("${widget._type}");
+    switch (widget._type) {
+      case HOME_TYPE.ARTICLE_LIST:
+        // 去掉置顶
+        setState(() {
+          _list.removeRange(0, _listTop.length);
+        });
+        break;
+      case HOME_TYPE.ARTICLE_TOP:
+        // 加上置顶
+        setState(() {
+          _list.insertAll(0, _listTop);
+        });
+        break;
+      case HOME_TYPE.PROJECT_LIST:
+        // do nothing
+        print("3333");
+        break;
+    }
+  } //list的item
+
   Widget _item(ArticleModel model) {
     return new Card(
       child: new Container(
@@ -128,14 +155,17 @@ class _ArticleListPageState extends State<ArticleListPage> {
     if (page == 0) {
       Future.wait([Http().getArticleTop(), Http().getArticleList(0)])
           .then((value) {
-        List<ArticleModel> listTop = value[0];
-        listTop.forEach((element) => element.top = true);
-        _sizeTop = listTop.length;
+        if (_listTop.length != 0) {
+          _listTop.clear();
+          _listTop.addAll(value[0]);
+          _listTop.forEach((element) => element.top = true);
+        }
+        _sizeTop = _listTop.length;
         BaseListModel<ArticleModel> list = value[1];
         _controller.finishLoad(noMore: list.datas.length >= list.total);
         _page = page;
         _list.clear();
-        _list.addAll(listTop);
+        _list.addAll(_listTop);
         _list.addAll(list.datas);
       }).then((value) => setState(() {}));
     } else {
@@ -184,4 +214,11 @@ class _ArticleListPageState extends State<ArticleListPage> {
         break;
     }
   }
+
+  void addArticleTop() {}
+
+  void removeArticleTop() {}
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -72,14 +72,12 @@ class Http {
       return Future.error(new BaseModel(map['errorCode'], map['errorMsg']));
     } else if (map['data'] is List) {
       //返回list数据
-      debugPrint("request list");
       return Future.value(getListFormat(map['data'], format));
     } else {
       //返回data数据
       Map dataMap = map['data'];
       if (dataMap['datas'] != null && dataMap['datas'] is List) {
         //分页list
-        debugPrint("request base list");
         return Future.value(new BaseListModel(
             dataMap['curPage'],
             getListFormat(dataMap['datas'], format),
@@ -90,7 +88,6 @@ class Http {
             dataMap['total']
         ));
       } else {
-        debugPrint("request data");
         return Future.value(format(map['data']));
       }
     }
