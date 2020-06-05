@@ -29,6 +29,9 @@ class MyApp extends StatelessWidget {
 
         scaffoldBackgroundColor: Colors.white70,
       ),
+      routes: {
+
+      },
       home: new MainPage(),
     );
   }

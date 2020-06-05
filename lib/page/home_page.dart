@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:wanandroid/http/http.dart';
 import 'package:wanandroid/model/banner_model.dart';
-import 'package:wanandroid/page/article_list_page.dart';
+import 'package:wanandroid/page/home_list_page.dart';
 
 //首页
 class HomePage extends StatefulWidget {
@@ -45,10 +45,10 @@ class _HomePageState extends State<HomePage>
           body: new TabBarView(
             controller: _controller,
             children: <Widget>[
-              new ArticleListPage(
+              new HomeListPage(
                   _switch ? HOME_TYPE.ARTICLE_TOP : HOME_TYPE.ARTICLE_LIST,
                   () => getBannerList()),
-              new ArticleListPage(
+              new HomeListPage(
                   HOME_TYPE.PROJECT_LIST, () => getBannerList()),
             ],
           )),

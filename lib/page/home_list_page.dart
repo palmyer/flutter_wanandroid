@@ -13,17 +13,17 @@ enum HOME_TYPE {
 }
 
 //首页-列表
-class ArticleListPage extends StatefulWidget {
+class HomeListPage extends StatefulWidget {
   var _type = HOME_TYPE.ARTICLE_LIST;
   VoidCallback _callback;
 
-  ArticleListPage(this._type, this._callback);
+  HomeListPage(this._type, this._callback);
 
   @override
-  _ArticleListPageState createState() => _ArticleListPageState();
+  _HomeListPageState createState() => _HomeListPageState();
 }
 
-class _ArticleListPageState extends State<ArticleListPage> with AutomaticKeepAliveClientMixin {
+class _HomeListPageState extends State<HomeListPage> with AutomaticKeepAliveClientMixin {
   List<ArticleModel> _list = [];
   List<ArticleModel> _listTop = [];
   int _page = GlobalConfig.PAGE_START;
@@ -61,7 +61,7 @@ class _ArticleListPageState extends State<ArticleListPage> with AutomaticKeepAli
   }
 
   @override
-  void didUpdateWidget(ArticleListPage oldWidget) {
+  void didUpdateWidget(HomeListPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     switch (widget._type) {
       case HOME_TYPE.ARTICLE_LIST:
