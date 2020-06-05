@@ -12,6 +12,7 @@ enum HOME_TYPE {
   PROJECT_LIST,
 }
 
+//首页-列表
 class ArticleListPage extends StatefulWidget {
   var _type = HOME_TYPE.ARTICLE_LIST;
   VoidCallback _callback;

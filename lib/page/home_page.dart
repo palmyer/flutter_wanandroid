@@ -5,6 +5,7 @@ import 'package:wanandroid/http/http.dart';
 import 'package:wanandroid/model/banner_model.dart';
 import 'package:wanandroid/page/article_list_page.dart';
 
+//首页
 class HomePage extends StatefulWidget {
   GlobalKey<ScaffoldState> _parentKey;
 
