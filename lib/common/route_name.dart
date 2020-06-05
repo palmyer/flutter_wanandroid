@@ -1,3 +1,3 @@
 class RouteName {
-  static const aa = "";
+  static const ArticleListPage = 'ArticleListPage';
 }

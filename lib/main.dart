@@ -27,11 +27,8 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
 
-        scaffoldBackgroundColor: Colors.white70,
+        scaffoldBackgroundColor: Color(0xffe8e8e8),
       ),
-      routes: {
-
-      },
       home: new MainPage(),
     );
   }

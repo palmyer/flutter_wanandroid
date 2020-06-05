@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:wanandroid/http/http.dart';
 import 'package:wanandroid/model/tree_model.dart';
+import 'package:wanandroid/page/article_scaffod_page.dart';
 
 //体系
 class TreePage extends StatefulWidget {
@@ -62,7 +63,14 @@ class _TreePageState extends State<TreePage> {
                       element.name,
                       style: new TextStyle(fontSize: 12),
                     ),
-                    onPressed: () => print('${element.name}'),
+                    onPressed: () => Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) =>
+                                ArticleScaffoldPage(element.name, (page) {
+                                  return Http()
+                                      .getArticleList(page, cid: element.id);
+                                }))),
                   ))
               .toList(),
         )

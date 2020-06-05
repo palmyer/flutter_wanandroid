@@ -35,12 +35,12 @@ class Http {
         response, (element) => TreeModel.fromJson(element));
   }
 
-  //首页文章列表
-  Future<BaseListModel<ArticleModel>> getArticleList(int page) async {
-    Response response = await _dio.get('${API.ARTICLE_LIST}/$page/json');
-    return await checkResult(
-        response, (element) => ArticleModel.fromJson(element));
-  }
+//  //首页文章列表
+//  Future<BaseListModel<ArticleModel>> getArticleList(int page) async {
+//    Response response = await _dio.get('${API.ARTICLE_LIST}/$page/json');
+//    return await checkResult(
+//        response, (element) => ArticleModel.fromJson(element));
+//  }
 
   //最新项目tab (首页的第二个tab)
   Future<BaseListModel<ArticleModel>> getArticleProjectList(int page) async {
@@ -78,6 +78,20 @@ class Http {
     return await checkResult(
         response, (element) => ArticleModel.fromJson(element));
   }
+
+
+  Future<BaseListModel<ArticleModel>> getArticleList(int page, {int cid}) async {
+    Map<String, dynamic> map = {};
+    if(cid != null){
+      map['cid'] = cid;
+    }
+    Response response = await _dio.get('${API.ARTICLE_LIST}/$page/json', queryParameters: map);
+    return await checkResult(
+        response, (element) => ArticleModel.fromJson(element));
+  }
+
+
+
 
   Future checkResult<T>(Response response, Format<T> format) {
     String jsonStr = jsonEncode(response.data);

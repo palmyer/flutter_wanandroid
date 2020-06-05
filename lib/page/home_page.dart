@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:wanandroid/http/http.dart';
+import 'package:wanandroid/model/article_model.dart';
 import 'package:wanandroid/model/banner_model.dart';
-import 'package:wanandroid/page/home_list_page.dart';
+import 'package:wanandroid/model/base_model.dart';
+import 'package:wanandroid/page/article_list_page.dart';
 
 //首页
 class HomePage extends StatefulWidget {
@@ -22,14 +24,15 @@ class _HomePageState extends State<HomePage>
   List<BannerModel> _listBanner = [];
   bool _switch = true;
   int _index = 0;
+  int _lengthTop = 0;
 
   @override
   void initState() {
     super.initState();
-    print("initState");
     _listTitle = ["最新博文", "最新项目"];
     _controller = new TabController(
         initialIndex: _index, length: _listTitle.length, vsync: this);
+    getBannerList();
   }
 
   @override
@@ -45,11 +48,8 @@ class _HomePageState extends State<HomePage>
           body: new TabBarView(
             controller: _controller,
             children: <Widget>[
-              new HomeListPage(
-                  _switch ? HOME_TYPE.ARTICLE_TOP : HOME_TYPE.ARTICLE_LIST,
-                  () => getBannerList()),
-              new HomeListPage(
-                  HOME_TYPE.PROJECT_LIST, () => getBannerList()),
+              new ArticleListPage((page) => doRequest(page)),
+              new ArticleListPage((page) => doRequest(page)),
             ],
           )),
     );
@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage>
         indicatorSize: TabBarIndicatorSize.label,
         controller: _controller,
         tabs: _listTitle.map((e) => new Tab(text: e)).toList(),
-        onTap: (value) => _index = value,
+        onTap: (value) => setState(() => _index = value),
       ),
     );
   }
@@ -120,6 +120,39 @@ class _HomePageState extends State<HomePage>
           .getBannerList()
           .then((value) => _listBanner.addAll(value))
           .then((value) => setState(() {}));
+    }
+  }
+
+  doRequest(page) {
+    if (_index == 0) {
+      //文章列表
+      if (_switch) {
+        //打开置顶
+        if (page == 0) {
+          //合并：置顶+列表
+          return Future.wait([Http().getArticleTop(), Http().getArticleList(0)])
+              .then((value) {
+            List<ArticleModel> _listTop = [];
+            _listTop.addAll(value[0]);
+            _listTop.forEach((element) => element.top = true);
+            _lengthTop = _listTop.length;
+            BaseListModel<ArticleModel> _list = value[1];
+            _list.datas.insertAll(0, _listTop);
+            _list.total += _lengthTop;
+            return _list;
+          });
+        } else {
+          return Http().getArticleList(page).then((value) {
+            if (_switch) value.total += _lengthTop;
+          });
+        }
+      } else {
+        //关闭置顶
+        return Http().getArticleList(page);
+      }
+    } else if (_index == 1) {
+      //项目列表
+      return Http().getArticleProjectList(page);
     }
   }
 }

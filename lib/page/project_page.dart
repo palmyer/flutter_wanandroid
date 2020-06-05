@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wanandroid/http/http.dart';
 import 'package:wanandroid/model/project_tree_model.dart';
-import 'package:wanandroid/page/project_list_page.dart';
+import 'package:wanandroid/page/article_list_page.dart';
 import 'package:wanandroid/widget/empty_widget.dart';
 
 //项目
@@ -53,7 +53,9 @@ class _ProjectPageState extends State<ProjectPage>
         ? EmptyWidget()
         : new TabBarView(
             controller: _controller,
-            children: _listTab.map((e) => new ProjectListPage(e.id)).toList(),
+            children: _listTab.map((e) => new ArticleListPage((page){
+              return Http().getProjectList(page, e.id);
+            })).toList(),
           );
   }
 
