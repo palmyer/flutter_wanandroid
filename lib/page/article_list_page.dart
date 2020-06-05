@@ -33,7 +33,6 @@ class _ArticleListPageState extends State<ArticleListPage> with AutomaticKeepAli
   @override
   void initState() {
     super.initState();
-    print("initState_list");
     _controller = new EasyRefreshController();
     _controller.finishLoad(noMore: true);
   }
@@ -64,8 +63,6 @@ class _ArticleListPageState extends State<ArticleListPage> with AutomaticKeepAli
   @override
   void didUpdateWidget(ArticleListPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print("change");
-    print("${widget._type}");
     switch (widget._type) {
       case HOME_TYPE.ARTICLE_LIST:
         // 去掉置顶
@@ -81,7 +78,6 @@ class _ArticleListPageState extends State<ArticleListPage> with AutomaticKeepAli
         break;
       case HOME_TYPE.PROJECT_LIST:
         // do nothing
-        print("3333");
         break;
     }
   } //list的item

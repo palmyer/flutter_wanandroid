@@ -7,6 +7,7 @@ import 'package:wanandroid/http/interceptor.dart';
 import 'package:wanandroid/model/article_model.dart';
 import 'package:wanandroid/model/banner_model.dart';
 import 'package:wanandroid/model/base_model.dart';
+import 'package:wanandroid/model/project_tree_model.dart';
 import 'package:wanandroid/model/tree_model.dart';
 
 typedef T Format<T>(dynamic element);
@@ -59,6 +60,21 @@ class Http {
   //置顶文章
   Future<List<ArticleModel>> getArticleTop() async {
     Response response = await _dio.get(API.ARTICLE_TOP_LIST);
+    return await checkResult(
+        response, (element) => ArticleModel.fromJson(element));
+  }
+
+  //项目分类
+  Future<List<ProjectTreeModel>> getProjectTreeList() async {
+    Response response = await _dio.get(API.PROJECT_TREE);
+    return await checkResult(
+        response, (element) => ProjectTreeModel.fromJson(element));
+  }
+
+  //项目列表数据
+  Future<BaseListModel<ArticleModel>> getProjectList(int page, int id) async {
+    Response response = await _dio.get(
+        '${API.PROJECT_LIST}/$page/json', queryParameters: {'cid': id});
     return await checkResult(
         response, (element) => ArticleModel.fromJson(element));
   }

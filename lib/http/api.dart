@@ -6,4 +6,6 @@ class API {
   static const ARTICLE_TOP_LIST = 'article/top/json';
   static const ARTICLE_PROJECT_LIST = 'article/listproject';
   static const BANNER_LIST = 'banner/json';
+  static const PROJECT_TREE = 'project/tree/json';
+  static const PROJECT_LIST = 'project/list';
 }
