@@ -18,12 +18,7 @@ class _ProjectPageState extends State<ProjectPage>
   @override
   void initState() {
     super.initState();
-
-    Future.delayed(
-      Duration(milliseconds: 100),
-    ).then((_) {
-      getTabList();
-    });
+    getTabList();
   }
 
   @override
