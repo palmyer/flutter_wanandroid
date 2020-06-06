@@ -13,12 +13,21 @@ class _TreeTabPageState extends State<TreeTabPage>
     with SingleTickerProviderStateMixin {
   List _list = [];
   TabController _controller;
+  int _index = 0;
 
   @override
   void initState() {
     super.initState();
     _list = ['体系', '导航'];
-    _controller = new TabController(length: _list.length, vsync: this);
+    _controller = new TabController(
+        initialIndex: _index, length: _list.length, vsync: this);
+    _controller.addListener(() {
+      if (_index != _controller.index) {
+        setState(() {
+          _index = _controller.index;
+        });
+      }
+    });
   }
 
   @override
@@ -39,6 +48,12 @@ class _TreeTabPageState extends State<TreeTabPage>
                   ))
               .toList(),
         ),
+        actions: <Widget>[
+          new Offstage(
+            offstage: _index == 1,
+            child: new IconButton(icon: Icon(Icons.search), onPressed: () {}),
+          )
+        ],
       ),
       body: new TabBarView(
         controller: _controller,
