@@ -5,6 +5,7 @@ import 'package:wanandroid/common/global_config.dart';
 import 'package:wanandroid/http/http.dart';
 import 'package:wanandroid/model/navigator_model.dart';
 
+//导航
 class NavigatorPage extends StatefulWidget {
   @override
   _NavigatorPageState createState() => _NavigatorPageState();

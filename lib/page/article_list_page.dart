@@ -6,6 +6,7 @@ import 'package:wanandroid/model/base_model.dart';
 
 typedef Future<BaseListModel<ArticleModel>> RequestData(int page);
 
+//文章列表
 class ArticleListPage extends StatefulWidget {
   RequestData _requestData;
 

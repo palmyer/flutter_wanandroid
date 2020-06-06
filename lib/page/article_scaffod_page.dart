@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wanandroid/model/article_model.dart';
-import 'package:wanandroid/model/base_model.dart';
 import 'package:wanandroid/page/article_list_page.dart';
 
-typedef Future<BaseListModel<ArticleModel>> RequestData(int page);
-
+//文章页
 class ArticleScaffoldPage extends StatelessWidget {
   String _title;
   RequestData _requestData;

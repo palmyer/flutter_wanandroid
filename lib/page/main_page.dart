@@ -8,6 +8,7 @@ import 'package:wanandroid/page/navigator_page.dart';
 import 'package:wanandroid/page/project_page.dart';
 import 'package:wanandroid/page/tree_tab_page.dart';
 
+//主页
 class MainPage extends StatefulWidget {
   @override
   _MainPageState createState() => _MainPageState();
