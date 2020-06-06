@@ -6,7 +6,7 @@ import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:wanandroid/page/home_page.dart';
 import 'package:wanandroid/page/navigator_page.dart';
 import 'package:wanandroid/page/project_page.dart';
-import 'package:wanandroid/page/tree_page.dart';
+import 'package:wanandroid/page/tree_tab_page.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -41,7 +41,8 @@ class _MainPageState extends State<MainPage> {
       new HomePage(_key),
       new ProjectPage(),
       new NavigatorPage(),
-      new TreePage(),
+//      new TreePage(),//体验不好，在想想办法
+      new TreeTabPage(),
       new HomePage(_key),
     ];
   }
