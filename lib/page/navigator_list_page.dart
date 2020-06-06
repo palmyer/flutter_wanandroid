@@ -10,11 +10,12 @@ class NavigatorListPage extends StatefulWidget {
   _NavigatorListPageState createState() => _NavigatorListPageState();
 }
 
-class _NavigatorListPageState extends State<NavigatorListPage> {
+class _NavigatorListPageState extends State<NavigatorListPage> with AutomaticKeepAliveClientMixin {
   List _list = [];
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return new EasyRefresh(
       child: new ListView.builder(
         padding: new EdgeInsets.all(16),
@@ -64,4 +65,7 @@ class _NavigatorListPageState extends State<NavigatorListPage> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

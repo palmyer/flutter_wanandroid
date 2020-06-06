@@ -11,11 +11,12 @@ class TreeListPage extends StatefulWidget {
   _TreeListPageState createState() => _TreeListPageState();
 }
 
-class _TreeListPageState extends State<TreeListPage> {
+class _TreeListPageState extends State<TreeListPage> with AutomaticKeepAliveClientMixin {
   List _list = [];
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return new EasyRefresh(
       child: new ListView.builder(
         padding: new EdgeInsets.all(16),
@@ -72,4 +73,7 @@ class _TreeListPageState extends State<TreeListPage> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

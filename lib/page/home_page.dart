@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   TabController _controller;
   List<String> _listTitle = [];
   List<BannerModel> _listBanner = [];
@@ -155,4 +155,7 @@ class _HomePageState extends State<HomePage>
       return Http().getArticleProjectList(page);
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
