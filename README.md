@@ -2,7 +2,8 @@
 
 玩安卓Flutter客户端
 
-<img src="screenshot/home.png" width = "375" height = "667" alt="" align=center />
-<img src="screenshot/project.png" width = "375" height = "667" alt="" align=center />
-<img src="screenshot/navigator.png" width = "375" height = "667" alt="" align=center />
-<img src="screenshot/system.png" width = "375" height = "667" alt="" align=center />
+![Image](screenshot/home.png){:height="30%" width="30%"}
+![Image](screenshot/project.png){:height="30%" width="30%"}
+![Image](screenshot/navigator.png){:height="30%" width="30%"}
+![Image](screenshot/system.png){:height="30%" width="30%"}
+
