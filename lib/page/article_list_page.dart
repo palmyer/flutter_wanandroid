@@ -52,6 +52,14 @@ class _ArticleListPageState extends State<ArticleListPage>
     );
   }
 
+  @override
+  void didUpdateWidget(ArticleListPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(oldWidget._requestData != widget._requestData){
+      _controller.callRefresh();
+    }
+  }
+
   doRequest(int page) {
     widget._requestData(page).then((value) {
       if (page == 0) {

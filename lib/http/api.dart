@@ -9,4 +9,6 @@ class API {
   static const PROJECT_TREE = 'project/tree/json';
   static const PROJECT_LIST = 'project/list';
   static const NAVIGATOR_LIST = 'navi/json';
+  static const HOT_KEY_LIST = 'hotkey/json';
+  static const QUERY_LIST = 'article/query';
 }

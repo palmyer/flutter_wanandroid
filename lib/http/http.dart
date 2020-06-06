@@ -7,6 +7,7 @@ import 'package:wanandroid/http/interceptor.dart';
 import 'package:wanandroid/model/article_model.dart';
 import 'package:wanandroid/model/banner_model.dart';
 import 'package:wanandroid/model/base_model.dart';
+import 'package:wanandroid/model/hot_key_model.dart';
 import 'package:wanandroid/model/navigator_model.dart';
 import 'package:wanandroid/model/project_tree_model.dart';
 import 'package:wanandroid/model/tree_model.dart';
@@ -80,18 +81,35 @@ class Http {
         response, (element) => NavigatorModel.fromJson(element));
   }
 
+  //搜索热词
+  Future<List<HotKeyModel>> getHotKeyList() async {
+    Response response = await _dio.get(API.HOT_KEY_LIST);
+    return await checkResult(
+        response, (element) => HotKeyModel.fromJson(element));
+  }
+
+  //文章
   Future<BaseListModel<ArticleModel>> getArticleList(int page,
-      {int cid}) async {
+      {int cid, String author}) async {
     Map<String, dynamic> map = {};
-    if (cid != null) {
+    if (cid != null)
       map['cid'] = cid;
-    }
+    if (author != null&&author.isNotEmpty)
+      map['author'] = author;
     Response response = await _dio.get(
         '${API.ARTICLE_LIST}/$page/json', queryParameters: map);
     return await checkResult(
         response, (element) => ArticleModel.fromJson(element));
   }
 
+  //搜索
+  Future<BaseListModel<ArticleModel>> getSearchList(int page,
+      String keyword) async {
+    Response response = await _dio.post(
+        '${API.QUERY_LIST}/$page/json', queryParameters: {'k': keyword});
+    return await checkResult(
+        response, (element) => ArticleModel.fromJson(element));
+  }
 
   Future checkResult<T>(Response response, Format<T> format) {
     String jsonStr = jsonEncode(response.data);
