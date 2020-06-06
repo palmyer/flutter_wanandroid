@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:wanandroid/common/global_config.dart';
 import 'package:wanandroid/http/http.dart';
 import 'package:wanandroid/model/tree_model.dart';
 import 'package:wanandroid/page/article_scaffod_page.dart';
@@ -53,11 +54,12 @@ class _TreePageState extends State<TreePage> {
           padding: new EdgeInsets.symmetric(vertical: 10),
           child: new Text(
             model.name,
-            style: const TextStyle(fontSize: 14),
+            style: const TextStyle(fontSize: GlobalConfig.fontSize_title,fontWeight: FontWeight.bold),
           ),
         ),
         new Wrap(
-          spacing: 10,
+          spacing: 8,
+          runSpacing: -5,
           children: model.children
               .map((element) => new ActionChip(
                     backgroundColor: getRandomColor(a: 200),
