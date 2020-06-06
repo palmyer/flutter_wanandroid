@@ -9,6 +9,7 @@ enum search_type {
 }
 
 //搜索
+//TODO 热词功能
 class SearchPage extends StatefulWidget {
   @override
   _SearchPageState createState() => _SearchPageState();
