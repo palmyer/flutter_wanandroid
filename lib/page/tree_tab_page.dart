@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wanandroid/common/global_config.dart';
 import 'package:wanandroid/page/navigator_list_page.dart';
+import 'package:wanandroid/page/search_page.dart';
 import 'package:wanandroid/page/tree_list_page.dart';
 
 //体系&导航
@@ -51,7 +52,14 @@ class _TreeTabPageState extends State<TreeTabPage>
         actions: <Widget>[
           new Offstage(
             offstage: _index == 1,
-            child: new IconButton(icon: Icon(Icons.search), onPressed: () {}),
+            child: new IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => SearchPage()));
+                }),
           )
         ],
       ),
