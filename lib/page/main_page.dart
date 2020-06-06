@@ -31,7 +31,7 @@ class _MainPageState extends State<MainPage> {
       new BottomNavigationBarItem(
           icon: new Icon(Icons.folder_open), title: new Text("项目")),
       new BottomNavigationBarItem(
-          icon: new Icon(Icons.search), title: new Text("搜索")),
+          icon: new Icon(Icons.navigation), title: new Text("导航")),
       new BottomNavigationBarItem(
           icon: new Icon(Icons.sort), title: new Text("体系")),
       new BottomNavigationBarItem(
