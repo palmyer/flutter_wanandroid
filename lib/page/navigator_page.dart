@@ -14,12 +14,37 @@ class _NavigatorPageState extends State<NavigatorPage> {
   List<NavigatorModel> _listLeft = [];
   List<NavigatorModel> _listRight = [];
   int _selectIndex = 0;
-  ItemScrollController _controller;
+
+  //左边list的滚动监听
+  ScrollController _scrollControllerLeft;
+
+  //右边list滚动操作
+  ItemScrollController _controllerRight;
+
+  //右边list的滚动监听
+  ItemPositionsListener _positionsListenerRight;
 
   @override
   void initState() {
     super.initState();
-    _controller = new ItemScrollController();
+    _controllerRight = new ItemScrollController();
+    _scrollControllerLeft = new ScrollController();
+    _scrollControllerLeft.addListener(() {});
+    _positionsListenerRight = ItemPositionsListener.create();
+    _positionsListenerRight.itemPositions.addListener(() {
+      //一定要scrollTo之后才会回调这个方法，为什么呢？
+      ItemPosition itemPosition =
+          _positionsListenerRight.itemPositions.value.first;
+      print("_selectIndex: $_selectIndex");
+      print("index: ${itemPosition.index}");
+      if (_selectIndex != itemPosition.index) {
+        setState(() {
+          _selectIndex = itemPosition.index;
+        });
+        _scrollControllerLeft.animateTo(_selectIndex * 38.0,
+            duration: Duration(milliseconds: 200), curve: Curves.linear);
+      }
+    });
     doRequest();
   }
 
@@ -42,6 +67,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
     return new SizedBox(
       width: 100,
       child: new ListView.builder(
+        controller: _scrollControllerLeft,
         itemBuilder: (context, index) {
           return new Container(
             height: 38,
@@ -52,13 +78,13 @@ class _NavigatorPageState extends State<NavigatorPage> {
                   int during = (index - _selectIndex).abs() * 200;
                   during = during < 200 ? 200 : during;
                   during = during > 2000 ? 2000 : during;
-                  _controller.scrollTo(
+                  _controllerRight.scrollTo(
                       index: index,
                       duration: Duration(milliseconds: during),
-                      curve: Curves.easeOut);
-                  setState(() {
-                    _selectIndex = index;
-                  });
+                      curve: Curves.linear);
+//                  setState(() {
+//                    _selectIndex = index;
+//                  });
                 },
                 child: new Text(
                   _listLeft[index].name,
@@ -81,7 +107,8 @@ class _NavigatorPageState extends State<NavigatorPage> {
       child: new Container(
         color: Colors.white,
         child: new ScrollablePositionedList.builder(
-          itemScrollController: _controller,
+          itemScrollController: _controllerRight,
+          itemPositionsListener: _positionsListenerRight,
           itemCount: _listRight.length,
           itemBuilder: (context, index) {
             NavigatorModel model = _listRight[index];
@@ -133,31 +160,22 @@ class _NavigatorPageState extends State<NavigatorPage> {
     );
   }
 
-//  Widget _itemRight(List<ArticleModel> model) {
-//    if (model.top) {
-//      return new Container(
-//        width: double.infinity,
-//        height: 40,
-//        child: new Text(model.chapterName),
-//      );
-//    } else {
-//      return new Container(
-//        height: 20,
-//        child: new Text(model.title),
-//      );
-//    }
-//  }
-
   doRequest() {
-    Http().getNavigatorList().then((value) {
-      _listLeft.clear();
-      _listRight.clear();
-      _listLeft.addAll(value);
-      _listRight.addAll(value);
-//      for (NavigatorModel model in value) {
-//        _listRight.add(new ArticleModel(chapterName: model.name, top: true));
-//        _listRight.addAll(model.articles);
-//      }
-    }).then((value) => setState(() {}));
+    Http()
+        .getNavigatorList()
+        .then((value) {
+          _listLeft.clear();
+          _listRight.clear();
+          _listLeft.addAll(value);
+          _listRight.addAll(value);
+        })
+        .then((value) => setState(() => _selectIndex = 0))
+        //如果不先scrollTo，那么itemPositionListener没有回调，为什么呢？
+        //必须先等待setState完成，经验值500
+        .then((value) => Future.delayed(Duration(milliseconds: 500)))
+        .then(
+          (value) => _controllerRight.scrollTo(
+              index: _selectIndex, duration: Duration(milliseconds: 1)),
+        );
   }
 }
