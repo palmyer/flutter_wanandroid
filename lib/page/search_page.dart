@@ -41,7 +41,6 @@ class _SearchPageState extends State<SearchPage> {
             child: new FlatButton(
                 padding: EdgeInsets.zero,
                 onPressed: () {
-                  print('click');
                   setState(() {
                     _requestData = getRequestData();
                   });
@@ -53,7 +52,9 @@ class _SearchPageState extends State<SearchPage> {
           )
         ],
       ),
-      body: new ArticleListPage(_requestData),
+      body: _controller.value.text.isEmpty
+          ? _hotWidget()
+          : new ArticleListPage(_requestData),
     );
   }
 
@@ -115,12 +116,13 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   getRequestData() {
-    if (_initValue == search_type.keyword)
-      {print("keyword");
-      return (page) => Http().getSearchList(page, _controller.text);}
-    else
-    {print("author");
-      return (page) => Http().getArticleList(page, author: _controller.text);}
+    if (_initValue == search_type.keyword) {
+      print("keyword");
+      return (page) => Http().getSearchList(page, _controller.text);
+    } else {
+      print("author");
+      return (page) => Http().getArticleList(page, author: _controller.text);
+    }
   }
 
   Widget _hotWidget() {
@@ -130,8 +132,14 @@ class _SearchPageState extends State<SearchPage> {
         spacing: 5,
         runSpacing: -5,
         children: _listHot
-            .map((e) =>
-                new ActionChip(label: new Text(e.name), onPressed: () {}))
+            .map((e) => new ActionChip(
+                label: new Text(e.name),
+                onPressed: () {
+                  _controller.text = e.name;
+                  setState(() {
+                    _requestData = getRequestData();
+                  });
+                }))
             .toList(),
       ),
     );
