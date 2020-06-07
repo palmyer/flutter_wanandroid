@@ -15,7 +15,6 @@ class ArticleScaffoldPage extends StatelessWidget {
         title: new Text(_title),
       ),
       body: new ArticleListPage(_requestData),
-      backgroundColor: Colors.white70,
     );
   }
 }

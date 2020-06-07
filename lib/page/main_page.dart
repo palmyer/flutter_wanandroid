@@ -41,8 +41,7 @@ class _MainPageState extends State<MainPage> {
     _listPage = [
       new HomePage(_key),
       new ProjectPage(),
-      new NavigatorPage(),
-//      new TreePage(),//体验不好，在想想办法
+      new NavigatorPage(),//体验不好，在想想办法
       new TreeTabPage(),
       new HomePage(_key),
     ];
@@ -52,9 +51,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       key: _key,
-      drawer: new Drawer(
-        child: new Text("data"),
-      ),
+      drawer: getDrawer(),
       body: _listPage[_currentIndex],
       bottomNavigationBar: new BottomNavigationBar(
         items: _listItem,
@@ -64,6 +61,24 @@ class _MainPageState extends State<MainPage> {
         type: BottomNavigationBarType.fixed,
         onTap: (index) => setState(() => _currentIndex = index),
       ),
+    );
+  }
+
+  Widget getDrawer() {
+    return new Drawer(
+      child: new ListView(
+        children: <Widget>[
+          new Text("data"),
+          new Text("data"),
+          new Text("data"),
+          new Text("data"),
+        ],
+      ),
+    );
+  }
+  Widget drawChild(){
+    return new Container(
+      child: new Text("data"),
     );
   }
 }
