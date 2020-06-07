@@ -80,9 +80,7 @@ class _SearchPageState extends State<SearchPage> {
               border: InputBorder.none,
             ),
             onSubmitted: (value) {},
-            onChanged: (val) {
-              print(val);
-            }));
+            onChanged: (val) {}));
   }
 
   Widget _popMenu() {
@@ -117,10 +115,8 @@ class _SearchPageState extends State<SearchPage> {
 
   getRequestData() {
     if (_initValue == search_type.keyword) {
-      print("keyword");
       return (page) => Http().getSearchList(page, _controller.text);
     } else {
-      print("author");
       return (page) => Http().getArticleList(page, author: _controller.text);
     }
   }
