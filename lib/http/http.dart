@@ -12,7 +12,6 @@ import 'package:wanandroid/model/base_model.dart';
 import 'package:wanandroid/model/hot_key_model.dart';
 import 'package:wanandroid/model/meizi_model.dart';
 import 'package:wanandroid/model/navigator_model.dart';
-import 'package:wanandroid/model/project_tree_model.dart';
 import 'package:wanandroid/model/tree_model.dart';
 import 'package:wanandroid/model/user_model.dart';
 
@@ -95,10 +94,10 @@ class Http {
   }
 
   //项目分类
-  Future<List<ProjectTreeModel>> getProjectTreeList() async {
+  Future<List<TreeModel>> getProjectTreeList() async {
     Response response = await _dio.get(API.PROJECT_TREE);
     return await checkResult(
-        response, (element) => ProjectTreeModel.fromJson(element));
+        response, (element) => TreeModel.fromJson(element));
   }
 
   //项目列表数据
@@ -142,6 +141,20 @@ class Http {
       String keyword) async {
     Response response = await _dio.post(
         '${API.QUERY_LIST}/$page/json', queryParameters: {'k': keyword});
+    return await checkResult(
+        response, (element) => ArticleModel.fromJson(element));
+  }
+
+  //获取公众号列表
+  Future<List<TreeModel>> getWxAuthorList() async {
+    Response response = await _dio.post(API.WX_ARTICLE_AUTHOR);
+    return await checkResult(
+        response, (element) => TreeModel.fromJson(element));
+  }
+
+  //查看某个公众号历史数据
+  Future<BaseListModel<ArticleModel>> getWxArticleList(int id, int page) async {
+    Response response = await _dio.post('${API.WX_ARTICLE_AUTHOR}/$id/$page/json');
     return await checkResult(
         response, (element) => ArticleModel.fromJson(element));
   }

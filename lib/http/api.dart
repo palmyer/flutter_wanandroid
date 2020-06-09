@@ -13,6 +13,8 @@ class API {
   static const QUERY_LIST = 'article/query';
   static const USER_LOGIN = 'user/login';
   static const USER_REGISTER = 'user/register';
+  static const WX_ARTICLE_AUTHOR = 'wxarticle/chapters/json';
+  static const WX_ARTICLE_LIST = 'wxarticle/list';
 
   //gankio的图
   static const MEIZI = 'https://gank.io/api/v2/data/category/Girl/type/Girl/page/1/count/10';

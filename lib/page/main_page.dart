@@ -8,6 +8,7 @@ import 'package:wanandroid/page/login_page.dart';
 import 'package:wanandroid/page/navigator_page.dart';
 import 'package:wanandroid/page/project_page.dart';
 import 'package:wanandroid/page/tree_tab_page.dart';
+import 'package:wanandroid/page/wx_article_page.dart';
 import 'package:wanandroid/res.dart';
 
 //主页
@@ -45,7 +46,7 @@ class _MainPageState extends State<MainPage> {
       new ProjectPage(),
       new NavigatorPage(), //体验不好，在想想办法
       new TreeTabPage(),
-      new HomePage(_key),
+      new WxArticlePage()
     ];
   }
 

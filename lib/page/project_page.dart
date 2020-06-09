@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wanandroid/http/http.dart';
-import 'package:wanandroid/model/project_tree_model.dart';
+import 'package:wanandroid/model/tree_model.dart';
 import 'package:wanandroid/page/article_list_page.dart';
 import 'package:wanandroid/widget/empty_widget.dart';
 
@@ -12,7 +12,7 @@ class ProjectPage extends StatefulWidget {
 
 class _ProjectPageState extends State<ProjectPage>
     with SingleTickerProviderStateMixin {
-  List<ProjectTreeModel> _listTab = [];
+  List<TreeModel> _listTab = [];
   TabController _controller;
 
   @override

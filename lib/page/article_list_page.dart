@@ -3,6 +3,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:wanandroid/common/global_config.dart';
 import 'package:wanandroid/model/article_model.dart';
 import 'package:wanandroid/model/base_model.dart';
+import 'package:wanandroid/res.dart';
 
 typedef Future<BaseListModel<ArticleModel>> RequestData(int page);
 
@@ -55,7 +56,7 @@ class _ArticleListPageState extends State<ArticleListPage>
   @override
   void didUpdateWidget(ArticleListPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(oldWidget._requestData != widget._requestData){
+    if (oldWidget._requestData != widget._requestData) {
       _controller.callRefresh();
     }
   }
@@ -97,33 +98,56 @@ class _ArticleListPageState extends State<ArticleListPage>
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            //作者
-            new Padding(
-              padding: new EdgeInsets.symmetric(vertical: 5),
-              child: new Row(
-                children: <Widget>[
-                  new Offstage(
-                    offstage: !model.top,
-                    child: _outlineTop(),
+            new Row(
+              children: <Widget>[
+                new Expanded(
+                    child: new Column(
+                  children: <Widget>[
+                    //作者
+                    new Padding(
+                      padding: new EdgeInsets.symmetric(vertical: 5),
+                      child: new Row(
+                        children: <Widget>[
+                          new Offstage(
+                            offstage: !model.top,
+                            child: _outlineTop(),
+                          ),
+                          new Text(
+                            model.author ?? "",
+                            style: new TextStyle(
+                                fontSize: GlobalConfig.fontSize_content,
+                                color: GlobalConfig.color_content),
+                          )
+                        ],
+                      ),
+                    ),
+                    //描述
+                    new Text(
+                      model.desc ?? "",
+                      style: new TextStyle(
+                          fontSize: GlobalConfig.fontSize_content,
+                          color: GlobalConfig.color_content),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                )),
+                new Offstage(
+                  offstage:
+                      model.envelopePic == null || model.envelopePic.isEmpty,
+                  child: new ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: new FadeInImage.assetNetwork(
+                      placeholder: Res.drawer_header,
+                      image: model.envelopePic,
+                      fit: BoxFit.cover,
+                      width: 100,
+                      height: 60,
+                    ),
                   ),
-                  new Text(
-                    model.author ?? "",
-                    style: new TextStyle(
-                        fontSize: GlobalConfig.fontSize_content,
-                        color: GlobalConfig.color_content),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
-            //描述
-            new Text(
-              model.desc ?? "",
-              style: new TextStyle(
-                  fontSize: GlobalConfig.fontSize_content,
-                  color: GlobalConfig.color_content),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            )
           ],
         ),
       ),
