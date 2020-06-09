@@ -8,3 +8,9 @@ Color getRandomColor({int a = 255, int r = 255, int g = 255, int b = 255}) {
       g != 255 ? r : Random.secure().nextInt(g),
       b != 255 ? r : Random.secure().nextInt(b));
 }
+
+bool isDebug(){
+  bool isDebug = false;
+  assert(isDebug = true);
+  return isDebug;
+}

@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:wanandroid/common/constant.dart';
 import 'package:wanandroid/http/http.dart';
+import 'package:wanandroid/model/user_model.dart';
 import 'package:wanandroid/res.dart';
+import 'package:wanandroid/util/pref_util.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -26,6 +29,9 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
+    _controllerName = new TextEditingController();
+    _controllerPwd = new TextEditingController();
+    _controllerRePwd = new TextEditingController();
     _controller = AnimationController(
       duration: const Duration(seconds: 4),
       vsync: this,
@@ -33,11 +39,13 @@ class _LoginPageState extends State<LoginPage>
     _animation = Tween<double>(begin: 1, end: 1.2).animate(_controller);
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       _src = _list.length == 0 ? "" : _list[_index++ % _list.length];
+      print("src: $_src");
       if (_controller.status == AnimationStatus.completed)
         _controller.reverse();
       else if (_controller.status == AnimationStatus.dismissed)
         _controller.forward();
     });
+    getMeiziList();
   }
 
   @override
@@ -55,12 +63,17 @@ class _LoginPageState extends State<LoginPage>
                 child: new SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
-                    child: new FadeInImage.assetNetwork(
-                      placeholder: Res.drawer_header,
-                      image: _src,
-                      fit: BoxFit.cover,
-                      fadeInDuration: const Duration(seconds: 1),
-                    )),
+                    child: _src.isEmpty
+                        ? Image.asset(
+                            Res.drawer_header,
+                            fit: BoxFit.cover,
+                          )
+                        : new FadeInImage.assetNetwork(
+                            placeholder: Res.drawer_header,
+                            image: _src,
+                            fit: BoxFit.cover,
+                            fadeInDuration: const Duration(seconds: 1),
+                          )),
               );
             },
           ),
@@ -111,6 +124,7 @@ class _LoginPageState extends State<LoginPage>
                         controller: _controllerRePwd,
                         decoration:
                             InputDecoration.collapsed(hintText: "再次输入密码"),
+                        obscureText: true,
                       ),
                     ),
                   ],
@@ -154,6 +168,7 @@ class _LoginPageState extends State<LoginPage>
   }
 
   getMeiziList() {
+    _controller.forward();
     Future.wait([
       Future.delayed(const Duration(milliseconds: 500)),
       Http().getMeiziList().then((value) {
@@ -162,7 +177,13 @@ class _LoginPageState extends State<LoginPage>
           _list.addAll(element.images);
         });
       })
-    ]).then((value) => setState(() => _controller.forward()));
+    ]);
+//        .then((value) {
+//      setState(() {
+//
+//      });
+//    });
+//    .then((value) => setState(() => _controller.forward()));
   }
 
   getRegister() {
@@ -174,7 +195,8 @@ class _LoginPageState extends State<LoginPage>
     Http()
         .getRegister(
             _controllerName.text, _controllerPwd.text, _controllerRePwd.text)
-        .then((value) => Navigator.pop(context));
+        .then((value) => saveUserInfo(value))
+        .then((value) => Navigator.pop(context, true));
   }
 
   getLogin() {
@@ -183,6 +205,14 @@ class _LoginPageState extends State<LoginPage>
     }
     Http()
         .getLogin(_controllerName.text, _controllerPwd.text)
-        .then((value) => Navigator.pop(context));
+        .then((value) => saveUserInfo(value))
+        .then((value) => Navigator.pop(context, true));
+  }
+
+  saveUserInfo(UserModel model) {
+    print("username: ${model.username}");
+    print("password: ${model.password}");
+    PrefUtil.setString(Constant.USER_NAME, model.username);
+    PrefUtil.setString(Constant.PASSWORD, _controllerPwd.text);
   }
 }

@@ -10,8 +10,9 @@ typedef Future<BaseListModel<ArticleModel>> RequestData(int page);
 //文章列表
 class ArticleListPage extends StatefulWidget {
   RequestData _requestData;
+  Widget head;
 
-  ArticleListPage(this._requestData);
+  ArticleListPage(this._requestData, {this.head});
 
   @override
   _ArticleListPageState createState() => _ArticleListPageState();
@@ -39,7 +40,10 @@ class _ArticleListPageState extends State<ArticleListPage>
       controller: _controller,
       child: ListView.builder(
         itemBuilder: (context, index) {
-          return _itemArticle(_list[index]);
+          if (widget.head != null && index == 0)
+            return widget.head;
+          else
+            return _itemArticle(_list[index]);
         },
         itemCount: _list.length,
       ),
@@ -47,7 +51,7 @@ class _ArticleListPageState extends State<ArticleListPage>
         doRequest(_page = 0);
       },
       onLoad: () async {
-        doRequest(_page++);
+        doRequest(++_page);
       },
       firstRefresh: true,
     );
@@ -59,16 +63,23 @@ class _ArticleListPageState extends State<ArticleListPage>
     if (oldWidget._requestData != widget._requestData) {
       _controller.callRefresh();
     }
+    if (oldWidget.head != widget.head) {
+      print("object");
+      setState(() {});
+    }
   }
 
   doRequest(int page) {
+    if (widget._requestData == null) return;
     widget._requestData(page).then((value) {
       if (page == 0) {
         _page = 0;
         _list.clear();
+        if (widget.head != null) _list.add(new ArticleModel());
       }
       _list.addAll(value.datas);
-      _controller.finishLoad(noMore: _list.length >= value.total);
+      int length = widget.head == null ? _list.length : (_list.length - 1);
+      _controller.finishLoad(noMore: length >= value.total);
     }).then((value) => setState(() {}));
   }
 

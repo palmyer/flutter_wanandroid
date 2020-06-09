@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
+import 'package:wanandroid/common/constant.dart';
 
 import 'package:wanandroid/page/home_page.dart';
 import 'package:wanandroid/page/login_page.dart';
@@ -10,6 +11,7 @@ import 'package:wanandroid/page/project_page.dart';
 import 'package:wanandroid/page/tree_tab_page.dart';
 import 'package:wanandroid/page/wx_article_page.dart';
 import 'package:wanandroid/res.dart';
+import 'package:wanandroid/util/pref_util.dart';
 
 //主页
 class MainPage extends StatefulWidget {
@@ -22,6 +24,7 @@ class _MainPageState extends State<MainPage> {
   List<BottomNavigationBarItem> _listItem;
   List _listPage;
   GlobalKey<ScaffoldState> _key;
+  String _name = "";
 
   @override
   void initState() {
@@ -39,7 +42,7 @@ class _MainPageState extends State<MainPage> {
       new BottomNavigationBarItem(
           icon: new Icon(Icons.sort), title: new Text("体系")),
       new BottomNavigationBarItem(
-          icon: new Icon(Icons.favorite_border), title: new Text("收藏")),
+          icon: new Icon(Icons.message), title: new Text("公众号")),
     ];
     _listPage = [
       new HomePage(_key),
@@ -48,6 +51,14 @@ class _MainPageState extends State<MainPage> {
       new TreeTabPage(),
       new WxArticlePage()
     ];
+    setName();
+  }
+
+  setName() {
+    setState(() async {
+      _name = await PrefUtil.getString(Constant.USER_NAME);
+      _name ??= "";
+    });
   }
 
   @override
@@ -84,10 +95,14 @@ class _MainPageState extends State<MainPage> {
                   children: <Widget>[
 //                    new Expanded(child: new SizedBox()),
                     new InkWell(
-                        onTap: () => Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new LoginPage())),
+                        onTap: () async {
+                          bool success = await Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new LoginPage()));
+                          print("success: $success");
+                          if (success) setName();
+                        },
                         child: new Container(
                           decoration: new BoxDecoration(
                             border: new Border.all(color: Colors.white60),
@@ -102,7 +117,7 @@ class _MainPageState extends State<MainPage> {
                     new Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: new Text(
-                        'data',
+                        _name,
                         style: new TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),

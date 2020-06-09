@@ -44,11 +44,11 @@ class Http {
   }
 
   //登录
-  Future<List<TreeModel>> getLogin(String username, String password) async {
+  Future<UserModel> getLogin(String username, String password) async {
     Response response = await _dio.post(API.USER_LOGIN,
         queryParameters: {'username': username, 'password': password});
     return await checkResult(
-        response, (element) => TreeModel.fromJson(element));
+        response, (element) => UserModel.fromJson(element));
   }
 
   //注册
@@ -154,7 +154,7 @@ class Http {
 
   //查看某个公众号历史数据
   Future<BaseListModel<ArticleModel>> getWxArticleList(int id, int page) async {
-    Response response = await _dio.post('${API.WX_ARTICLE_AUTHOR}/$id/$page/json');
+    Response response = await _dio.get('${API.WX_ARTICLE_LIST}/$id/$page/json');
     return await checkResult(
         response, (element) => ArticleModel.fromJson(element));
   }
