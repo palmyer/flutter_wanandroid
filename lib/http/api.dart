@@ -11,4 +11,9 @@ class API {
   static const NAVIGATOR_LIST = 'navi/json';
   static const HOT_KEY_LIST = 'hotkey/json';
   static const QUERY_LIST = 'article/query';
+  static const USER_LOGIN = 'user/login';
+  static const USER_REGISTER = 'user/register';
+
+  //gankio的图
+  static const MEIZI = 'https://gank.io/api/v2/data/category/Girl/type/Girl/page/1/count/10';
 }

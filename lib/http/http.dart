@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/material.dart';
 import 'package:wanandroid/http/api.dart';
 import 'package:wanandroid/http/interceptor.dart';
@@ -8,9 +10,11 @@ import 'package:wanandroid/model/article_model.dart';
 import 'package:wanandroid/model/banner_model.dart';
 import 'package:wanandroid/model/base_model.dart';
 import 'package:wanandroid/model/hot_key_model.dart';
+import 'package:wanandroid/model/meizi_model.dart';
 import 'package:wanandroid/model/navigator_model.dart';
 import 'package:wanandroid/model/project_tree_model.dart';
 import 'package:wanandroid/model/tree_model.dart';
+import 'package:wanandroid/model/user_model.dart';
 
 typedef T Format<T>(dynamic element);
 
@@ -21,6 +25,8 @@ class Http {
   Http._newInstance() {
     _dio = new Dio(new BaseOptions(baseUrl: API.BASE_URL));
     _dio.interceptors.add(new HttpInterceptor());
+    _dio.interceptors.add(CookieManager(CookieJar()));
+    print(CookieJar().loadForRequest(Uri.parse(API.BASE_URL)));
   }
 
   factory Http() {
@@ -28,6 +34,35 @@ class Http {
       _instance = Http._newInstance();
     }
     return _instance;
+  }
+
+  //唯一gank.io的接口，用于登录的ui
+  Future<List<MeiziModel>> getMeiziList() async {
+    Response response = await _dio.get(API.MEIZI);
+    Map map = jsonDecode(jsonEncode(response.data));
+    List list = map['data'];
+    return getListFormat(list, (element) => MeiziModel.fromJson(element));
+  }
+
+  //登录
+  Future<List<TreeModel>> getLogin(String username, String password) async {
+    Response response = await _dio.post(API.USER_LOGIN,
+        queryParameters: {'username': username, 'password': password});
+    return await checkResult(
+        response, (element) => TreeModel.fromJson(element));
+  }
+
+  //注册
+  Future<UserModel> getRegister(String username, String password,
+      String repassword) async {
+    Response response = await _dio.post(API.USER_REGISTER,
+        queryParameters: {
+          'username': username,
+          'password': password,
+          'repassword': repassword
+        });
+    return await checkResult(
+        response, (element) => UserModel.fromJson(element));
   }
 
   //体系数据
@@ -94,7 +129,7 @@ class Http {
     Map<String, dynamic> map = {};
     if (cid != null)
       map['cid'] = cid;
-    if (author != null&&author.isNotEmpty)
+    if (author != null && author.isNotEmpty)
       map['author'] = author;
     Response response = await _dio.get(
         '${API.ARTICLE_LIST}/$page/json', queryParameters: map);
