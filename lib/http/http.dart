@@ -25,6 +25,7 @@ class Http {
     _dio = new Dio(new BaseOptions(baseUrl: API.BASE_URL));
     _dio.interceptors.add(new HttpInterceptor());
     _dio.interceptors.add(CookieManager(CookieJar()));
+//    _dio.interceptors.add(CookieManager(PersistCookieJar()));
     print(CookieJar().loadForRequest(Uri.parse(API.BASE_URL)));
   }
 
@@ -62,6 +63,20 @@ class Http {
         });
     return await checkResult(
         response, (element) => UserModel.fromJson(element));
+  }
+
+  //登录
+  Future getLogout() async {
+    Response response = await _dio.get(API.USER_LOGOUT);
+    String jsonStr = jsonEncode(response.data);
+    Map map = jsonDecode(jsonStr);
+    if (map['errorCode'] != 0) {
+      //错误　
+      debugPrint("request error: ${map['errorMsg']}");
+      return Future.error(new BaseModel(map['errorCode'], map['errorMsg']));
+    }else{
+      return Future.value(true);
+    }
   }
 
   //体系数据

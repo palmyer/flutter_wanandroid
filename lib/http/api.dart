@@ -12,6 +12,7 @@ class API {
   static const HOT_KEY_LIST = 'hotkey/json';
   static const QUERY_LIST = 'article/query';
   static const USER_LOGIN = 'user/login';
+  static const USER_LOGOUT = 'user/logout/json';
   static const USER_REGISTER = 'user/register';
   static const WX_ARTICLE_AUTHOR = 'wxarticle/chapters/json';
   static const WX_ARTICLE_LIST = 'wxarticle/list';

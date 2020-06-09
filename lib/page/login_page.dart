@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage>
                             placeholder: Res.drawer_header,
                             image: _src,
                             fit: BoxFit.cover,
-                            fadeInDuration: const Duration(seconds: 1),
+                            fadeInDuration: const Duration(milliseconds: 500),
                           )),
               );
             },
@@ -168,22 +168,17 @@ class _LoginPageState extends State<LoginPage>
   }
 
   getMeiziList() {
-    _controller.forward();
-    Future.wait([
-      Future.delayed(const Duration(milliseconds: 500)),
-      Http().getMeiziList().then((value) {
-        _list.clear();
-        value.forEach((element) {
-          _list.addAll(element.images);
-        });
-      })
-    ]);
-//        .then((value) {
-//      setState(() {
-//
-//      });
-//    });
-//    .then((value) => setState(() => _controller.forward()));
+    Future.delayed(Duration(milliseconds: 500))
+        .then((value) => _controller.forward())
+        .then((value) => Future.wait([
+              Future.delayed(const Duration(milliseconds: 500)),
+              Http().getMeiziList().then((value) {
+                _list.clear();
+                value.forEach((element) {
+                  _list.addAll(element.images);
+                });
+              })
+            ]));
   }
 
   getRegister() {

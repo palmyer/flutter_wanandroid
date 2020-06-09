@@ -28,12 +28,14 @@ class _WxArticlePageState extends State<WxArticlePage> {
       appBar: new AppBar(
         title: new Text("公众号"),
       ),
-      body: _id == null?null:new ArticleListPage(
-        (page) {
-          return Http().getWxArticleList(_id, page);
-        },
-        head: _head,
-      ),
+      body: _id == null
+          ? null
+          : new ArticleListPage(
+              (page) {
+                return Http().getWxArticleList(_id, page);
+              },
+              head: _head,
+            ),
     );
   }
 
@@ -57,7 +59,10 @@ class _WxArticlePageState extends State<WxArticlePage> {
     return new Ink(
       decoration: new BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: getRandomColor(),
+        gradient: RadialGradient(
+            colors: [getRandomColor(), getRandomColor()],
+            radius: 1,
+            tileMode: TileMode.mirror),
       ),
       child: new InkWell(
         onTap: () => setState(() => _id = model.id),

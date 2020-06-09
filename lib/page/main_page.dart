@@ -3,6 +3,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:wanandroid/common/constant.dart';
+import 'package:wanandroid/http/http.dart';
 
 import 'package:wanandroid/page/home_page.dart';
 import 'package:wanandroid/page/login_page.dart';
@@ -54,11 +55,9 @@ class _MainPageState extends State<MainPage> {
     setName();
   }
 
-  setName() {
-    setState(() async {
-      _name = await PrefUtil.getString(Constant.USER_NAME);
-      _name ??= "";
-    });
+  setName() async {
+    _name = await PrefUtil.getString(Constant.USER_NAME);
+    _name ??= "";
   }
 
   @override
@@ -80,8 +79,7 @@ class _MainPageState extends State<MainPage> {
 
   Widget getDrawer() {
     return new Drawer(
-      child: new ListView(
-        padding: EdgeInsets.zero,
+      child: new Column(
         children: <Widget>[
           new DrawerHeader(
               decoration: BoxDecoration(
@@ -124,10 +122,67 @@ class _MainPageState extends State<MainPage> {
                   ],
                 ),
               )),
-          new Text("data"),
-          new Text("data"),
-          new Text("data"),
-          new Text("data"),
+          new InkWell(
+            onTap: () {},
+            child: new ListTile(
+              leading: new Icon(Icons.favorite),
+              title: new Text("我的收藏"),
+            ),
+          ),
+          new InkWell(
+            onTap: () {},
+            child: new ListTile(
+              leading: new Icon(Icons.share),
+              title: new Text("我的分享"),
+            ),
+          ),
+          new InkWell(
+            onTap: () {},
+            child: new ListTile(
+              leading: new Icon(Icons.supervisor_account),
+              title: new Text("广场列表"),
+            ),
+          ),
+          new InkWell(
+            onTap: () {},
+            child: new ListTile(
+              leading: new Icon(Icons.score),
+              title: new Text("我的积分"),
+            ),
+          ),
+          new InkWell(
+            onTap: () {},
+            child: new ListTile(
+              leading: new Icon(Icons.history),
+              title: new Text("浏览历史"),
+            ),
+          ),
+          new InkWell(
+            onTap: () {
+              new SnackBar(content: new Text("设置"));
+            },
+            child: new ListTile(
+              leading: new Icon(Icons.settings),
+              title: new Text("设置"),
+            ),
+          ),
+          new Expanded(
+              child: new Align(
+            alignment: Alignment.bottomLeft,
+            child: new InkWell(
+              onTap: () {
+                Http().getLogout().then((value) => setState(() {
+                      _name = "";
+                      PrefUtil.setString(Constant.USER_NAME, "");
+                      PrefUtil.setString(Constant.PASSWORD, "");
+                    }));
+              },
+              child: new ListTile(
+                leading: new Icon(Icons.exit_to_app),
+                title: new Text("退出登录"),
+              ),
+            ),
+          ))
         ],
       ),
     );

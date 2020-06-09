@@ -64,7 +64,6 @@ class _ArticleListPageState extends State<ArticleListPage>
       _controller.callRefresh();
     }
     if (oldWidget.head != widget.head) {
-      print("object");
       setState(() {});
     }
   }
