@@ -4,6 +4,7 @@ import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:wanandroid/common/constant.dart';
 import 'package:wanandroid/http/http.dart';
+import 'package:wanandroid/page/article_scaffod_page.dart';
 
 import 'package:wanandroid/page/home_page.dart';
 import 'package:wanandroid/page/login_page.dart';
@@ -99,7 +100,7 @@ class _MainPageState extends State<MainPage> {
                               new MaterialPageRoute(
                                   builder: (context) => new LoginPage()));
                           print("success: $success");
-                          if (success) setName();
+                          if (success ?? false) setName();
                         },
                         child: new Container(
                           decoration: new BoxDecoration(
@@ -123,14 +124,30 @@ class _MainPageState extends State<MainPage> {
                 ),
               )),
           new InkWell(
-            onTap: () {},
+            onTap: () => Navigator.push(
+              context,
+              new MaterialPageRoute(
+                builder: (context) => ArticleScaffoldPage(
+                  "我的收藏",
+                  (page) => Http().getCollectList(page),
+                ),
+              ),
+            ),
             child: new ListTile(
               leading: new Icon(Icons.favorite),
               title: new Text("我的收藏"),
             ),
           ),
           new InkWell(
-            onTap: () {},
+            onTap: () =>() => Navigator.push(
+              context,
+              new MaterialPageRoute(
+                builder: (context) => ArticleScaffoldPage(
+                  "我的分享",
+                      (page) => Http().(page),
+                ),
+              ),
+            ),
             child: new ListTile(
               leading: new Icon(Icons.share),
               title: new Text("我的分享"),

@@ -9,7 +9,6 @@ enum search_type {
 }
 
 //搜索
-//TODO 热词功能
 class SearchPage extends StatefulWidget {
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -33,29 +32,26 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: _searchView(),
-        actions: <Widget>[
-          new Container(
-            width: 60,
-            child: new FlatButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  setState(() {
-                    _requestData = getRequestData();
-                  });
-                },
-                child: new Text(
-                  "搜索",
-                  style: new TextStyle(color: Colors.white),
-                )),
-          )
-        ],
-      ),
-      body: _controller.value.text.isEmpty
-          ? _hotWidget()
-          : new ArticleListPage(_requestData),
-    );
+        appBar: new AppBar(
+          title: _searchView(),
+          actions: <Widget>[
+            new Container(
+              width: 60,
+              child: new FlatButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    setState(() {
+                      _requestData = getRequestData();
+                    });
+                  },
+                  child: new Text(
+                    "搜索",
+                    style: new TextStyle(color: Colors.white),
+                  )),
+            )
+          ],
+        ),
+        body: getBody());
   }
 
   Widget _searchView() {
@@ -139,6 +135,16 @@ class _SearchPageState extends State<SearchPage> {
             .toList(),
       ),
     );
+  }
+
+  Widget getBody() {
+    if (_controller.value.text.isEmpty) {
+      if (_initValue == search_type.keyword)
+        return _hotWidget();
+      else
+        return null;
+    } else
+      return new ArticleListPage(_requestData);
   }
 
   doHotRequest() {

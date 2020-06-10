@@ -16,6 +16,12 @@ class API {
   static const USER_REGISTER = 'user/register';
   static const WX_ARTICLE_AUTHOR = 'wxarticle/chapters/json';
   static const WX_ARTICLE_LIST = 'wxarticle/list';
+  static const COLLECT_LIST = 'lg/collect/list';
+  static const COLLECT_ARTICLE = 'lg/collect';
+  static const COLLECT_REMOVE_ARTICLE = 'lg/uncollect_originId';
+  static const COLLECT_REMOVE_MY = 'lg/uncollect';
+  static const SHARE = 'lg/user_article/add/json';
+  static const SHARE_LIST = 'lg/private_articles';
 
   //gankio的图
   static const MEIZI = 'https://gank.io/api/v2/data/category/Girl/type/Girl/page/1/count/10';

@@ -3,6 +3,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:wanandroid/common/global_config.dart';
 import 'package:wanandroid/http/http.dart';
 import 'package:wanandroid/model/navigator_model.dart';
+import 'package:wanandroid/page/webview_page.dart';
 import 'package:wanandroid/util/util.dart';
 
 //导航列表
@@ -11,7 +12,8 @@ class NavigatorListPage extends StatefulWidget {
   _NavigatorListPageState createState() => _NavigatorListPageState();
 }
 
-class _NavigatorListPageState extends State<NavigatorListPage> with AutomaticKeepAliveClientMixin {
+class _NavigatorListPageState extends State<NavigatorListPage>
+    with AutomaticKeepAliveClientMixin {
   List _list = [];
 
   @override
@@ -59,7 +61,14 @@ class _NavigatorListPageState extends State<NavigatorListPage> with AutomaticKee
                       element.title,
                       style: const TextStyle(fontSize: 12, color: Colors.white),
                     ),
-                    onPressed: () => print('click: ${element.link}'),
+                    onPressed: () => Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => WebViewPage(
+                                  element.link,
+                                  title: element.chapterName,
+                                  collect: element.collect,
+                                ))),
                   ))
               .toList(),
         )

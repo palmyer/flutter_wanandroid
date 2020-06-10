@@ -37,6 +37,7 @@ dependencies:
   flutter_swiper : ^1.1.6
   sticky_headers: ^0.1.8
   scrollable_positioned_list: ^0.1.6
+  webview_flutter: ^0.3.22+1
 
 dev_dependencies:
   flutter_test:

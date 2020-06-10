@@ -68,15 +68,7 @@ class Http {
   //登录
   Future getLogout() async {
     Response response = await _dio.get(API.USER_LOGOUT);
-    String jsonStr = jsonEncode(response.data);
-    Map map = jsonDecode(jsonStr);
-    if (map['errorCode'] != 0) {
-      //错误　
-      debugPrint("request error: ${map['errorMsg']}");
-      return Future.error(new BaseModel(map['errorCode'], map['errorMsg']));
-    }else{
-      return Future.value(true);
-    }
+    return checkResult(response, (element) => null);
   }
 
   //体系数据
@@ -174,6 +166,47 @@ class Http {
         response, (element) => ArticleModel.fromJson(element));
   }
 
+  //收藏文章列表
+  Future<BaseListModel<ArticleModel>> getCollectList(int page) async {
+    Response response = await _dio.get('${API.COLLECT_LIST}/$page/json');
+    return await checkResult(
+        response, (element) => ArticleModel.fromJson(element));
+  }
+
+  //收藏站内文章
+  Future collectAdd(int id) async {
+    Response response = await _dio.post('${API.COLLECT_ARTICLE}/$id/json');
+    return await checkResult(response, (element) => null);
+  }
+
+  //取消收藏 - 文章列表
+  Future collectRemoveArticle(int id) async {
+    Response response = await _dio.post(
+        '${API.COLLECT_REMOVE_ARTICLE}/$id/json');
+    return await checkResult(response, (element) => null);
+  }
+
+  //取消收藏 - 我的收藏页面
+  Future collectRemoveMy(int id, {int originId = -1}) async {
+    Response response = await _dio.post('${API.COLLECT_REMOVE_MY}/$id/json',
+        queryParameters: {'originId': originId});
+    return await checkResult(response, (element) => null);
+  }
+
+  //分享文章
+  Future share(String title, String link) async {
+    Response response = await _dio.post(API.SHARE,
+        queryParameters: {'title': title, 'link': link});
+    return await checkResult(response, (element) => null);
+  }
+
+  //自己的分享的文章列表
+  Future getShareArticle(int page) async {
+    Response response = await _dio.get('${API.SHARE_LIST}/$page/json');
+    return await checkResult(response, (element) => null);
+  }
+
+
   Future checkResult<T>(Response response, Format<T> format) {
     String jsonStr = jsonEncode(response.data);
     Map map = jsonDecode(jsonStr);
@@ -181,6 +214,8 @@ class Http {
       //错误　
       debugPrint("request error: ${map['errorMsg']}");
       return Future.error(new BaseModel(map['errorCode'], map['errorMsg']));
+    } else if (map['data'] == null) {
+      return Future.value(true);
     } else if (map['data'] is List) {
       //返回list数据
       return Future.value(getListFormat(map['data'], format));

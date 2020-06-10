@@ -25,6 +25,7 @@ class ArticleModel {
   String niceDate;
   String niceShareDate;
   String origin;
+  int originId;
   String prefix;
   String projectLink;
   int publishTime;
@@ -59,6 +60,7 @@ class ArticleModel {
       this.niceDate,
       this.niceShareDate,
       this.origin,
+      this.originId,
       this.prefix,
       this.projectLink,
       this.publishTime,
