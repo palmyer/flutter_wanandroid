@@ -1,10 +1,15 @@
-# wanandroid
+# 玩安卓Flutter客户端
 # In development
 
-玩安卓Flutter客户端
+## 项目截图
 
-<img src="screenshot/home.png" width = "250" height = "445" alt="" align=center /> <img src="screenshot/project.png" width = "250" height = "445" alt="" align=center />
-<img src="screenshot/navigator.png" width = "250" height = "445" alt="" align=center /> <img src="screenshot/system.png" width = "250" height = "445" alt="" align=center />
+<img src="screenshot/home.png" width = "240" height = "427" alt="" align=center />
+<img src="screenshot/drawer.png" width = "240" height = "427" alt="" align=center />
+<img src="screenshot/project.png" width = "240" height = "427" alt="" align=center />
+<img src="screenshot/navi.png" width = "240" height = "427" alt="" align=center />
+<img src="screenshot/tree.png" width = "240" height = "427" alt="" align=center />
+<img src="screenshot/wx.png" width = "240" height = "427" alt="" align=center />
+<img src="screenshot/login.png" width = "240" height = "427" alt="" align=center />
 
 #### request
 ```

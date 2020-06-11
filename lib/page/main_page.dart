@@ -13,6 +13,7 @@ import 'package:wanandroid/page/login_page.dart';
 import 'package:wanandroid/page/navigator_page.dart';
 import 'package:wanandroid/page/project_page.dart';
 import 'package:wanandroid/page/rank_page.dart';
+import 'package:wanandroid/page/setting_page.dart';
 import 'package:wanandroid/page/tree_tab_page.dart';
 import 'package:wanandroid/page/wx_article_page.dart';
 import 'package:wanandroid/res.dart';
@@ -142,24 +143,23 @@ class _MainPageState extends State<MainPage> {
           ),
           new InkWell(
             onTap: () => Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                    builder: (context) => ArticleScaffoldPage(
-                        "我的分享",
-                        (page) =>
-                            Http().getShareArticle(page + 1).then((value) {
-                              ShareList list = value.shareArticles;
-                              return new BaseListModel(
-                                  list.curPage,
-                                  list.datas,
-                                  list.offset,
-                                  list.over,
-                                  list.pageCount,
-                                  list.size,
-                                  list.total);
-                            })),
-                  ),
-                ),
+              context,
+              new MaterialPageRoute(
+                builder: (context) => ArticleScaffoldPage(
+                    "我的分享",
+                    (page) => Http().getShareArticle(page + 1).then((value) {
+                          ShareList list = value.shareArticles;
+                          return new BaseListModel(
+                              list.curPage,
+                              list.datas,
+                              list.offset,
+                              list.over,
+                              list.pageCount,
+                              list.size,
+                              list.total);
+                        })),
+              ),
+            ),
             child: new ListTile(
               leading: new Icon(Icons.share),
               title: new Text("我的分享"),
@@ -171,7 +171,7 @@ class _MainPageState extends State<MainPage> {
               new MaterialPageRoute(
                 builder: (context) => ArticleScaffoldPage(
                   "广场列表",
-                      (page) => Http().getAllShareArticle(page),
+                  (page) => Http().getAllShareArticle(page),
                 ),
               ),
             ),
@@ -193,16 +193,12 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           new InkWell(
-            onTap: () {},
-            child: new ListTile(
-              leading: new Icon(Icons.history),
-              title: new Text("浏览历史"),
+            onTap: () => Navigator.push(
+              context,
+              new MaterialPageRoute(
+                builder: (context) => SettingPage(),
+              ),
             ),
-          ),
-          new InkWell(
-            onTap: () {
-              new SnackBar(content: new Text("设置"));
-            },
             child: new ListTile(
               leading: new Icon(Icons.settings),
               title: new Text("设置"),
@@ -213,11 +209,14 @@ class _MainPageState extends State<MainPage> {
             alignment: Alignment.bottomLeft,
             child: new InkWell(
               onTap: () {
-                Http().getLogout().then((value) => setState(() {
-                      _name = "";
-                      PrefUtil.setString(Constant.USER_NAME, "");
-                      PrefUtil.setString(Constant.PASSWORD, "");
-                    }));
+                Http()
+                    .getLogout()
+                    .then((value) => setState(() {
+                          _name = "";
+                          PrefUtil.setString(Constant.USER_NAME, "");
+                          PrefUtil.setString(Constant.PASSWORD, "");
+                        }))
+                    .then((value) => setState(() {}));
               },
               child: new ListTile(
                 leading: new Icon(Icons.exit_to_app),
@@ -227,12 +226,6 @@ class _MainPageState extends State<MainPage> {
           ))
         ],
       ),
-    );
-  }
-
-  Widget drawChild() {
-    return new Container(
-      child: new Text("data"),
     );
   }
 }

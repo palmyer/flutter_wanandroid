@@ -14,12 +14,37 @@ class _RankPageState extends State<RankPage> {
   List<RankModel> _list = [];
   int _page = 1;
   EasyRefreshController _controller;
+  ScrollController _scrollController;
   RankModel _randModel;
+  GlobalKey _key;
+  GlobalKey _keyBottom;
+  bool _offstage = false;
+  double _dy;
+  int _index;
 
   @override
   void initState() {
     super.initState();
+    _key = new GlobalKey();
+    _keyBottom = new GlobalKey();
     _controller = new EasyRefreshController();
+    _scrollController = new ScrollController();
+    _scrollController.addListener(() {
+      if (_dy == null || _dy == 0.0) {
+        _dy = getDy(_keyBottom);
+      }
+      print("dy: $_dy");
+      double _dyList = getDy(_key);
+      if (_dyList == null) {
+        _offstage = _scrollController.position.pixels > _index * 80;
+
+//        _offstage = false;
+      } else {
+        _offstage = _dyList < _dy;
+      }
+
+      setState(() {});
+    });
   }
 
   @override
@@ -34,8 +59,9 @@ class _RankPageState extends State<RankPage> {
               child: new EasyRefresh(
             controller: _controller,
             child: new ListView.builder(
+              controller: _scrollController,
               itemBuilder: (BuildContext context, int index) {
-                return _buildItem(_list[index]);
+                return _buildItem(_list[index], index: index);
               },
               itemCount: _list.length,
             ),
@@ -48,18 +74,22 @@ class _RankPageState extends State<RankPage> {
             },
             firstRefresh: true,
           )),
-          _randModel == null
-              ? new Container()
-              : _buildItem(_randModel, single: true),
+          new Offstage(
+            offstage: _offstage,
+            child: _randModel == null
+                ? new Container()
+                : _buildItem(_randModel, single: true),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildItem(RankModel model, {bool single = false}) {
+  Widget _buildItem(RankModel model, {bool single = false, int index = -1}) {
     return new Container(
+      key: single ? _keyBottom : _index == index ? _key : null,
       decoration: BoxDecoration(
-          color: model.select || single ? Colors.yellow : Colors.white,
+          color: _index == index || single ? Colors.yellow : Colors.white,
           border: single
               ? null
               : const Border(bottom: BorderSide(color: GlobalConfig.color_bg))),
@@ -119,20 +149,17 @@ class _RankPageState extends State<RankPage> {
           _controller.finishLoad(noMore: _list.length >= value.total);
           return value;
         }),
-        Http().getMyRank().then((value) {
-          value.userId = 7710;
-          return value;
-        })
+        Http().getMyRank()
       ]).then((value) {
         BaseListModel<RankModel> list = value[0];
         List<RankModel> rankList = list.datas;
         _randModel = value[1];
-        for (RankModel model in rankList) {
+        for (int i = 0; i < rankList.length; i++) {
+          RankModel model = rankList[i];
           if (model.userId == _randModel.userId) {
-            print("${model.username}");
-            model.select = true;
-          } else
-            model.select = false;
+            _index = i;
+            break;
+          }
         }
       }).then((value) => setState(() {}));
     } else {
@@ -145,28 +172,22 @@ class _RankPageState extends State<RankPage> {
         _controller.finishLoad(noMore: _list.length >= value.total);
         return value;
       }).then((value) {
-        for (RankModel model in value.datas) {
-          if (model.userId == _randModel.userId)
-            model.select = true;
-          else
-            model.select = false;
+        for (int i = 0; i < value.datas.length; i++) {
+          RankModel model = value.datas[i];
+          if (model.userId == _randModel.userId) {
+            _index = i;
+            break;
+          }
         }
       }).then((value) => setState(() {}));
     }
   }
 
-//  doRequest(int page) {
-//    Http().getRank(page).then((value) {
-//      if (page == 1) {
-//        _page = 1;
-//        _list.clear();
-//      }
-//      _list.addAll(value.datas);
-//      _controller.finishLoad(noMore: _list.length >= value.total);
-//    }).then((value) => setState(() {}));
-//  }
-//
-//  doMyRank() {
-//    Http().getMyRank().then((value) => setState(() => _randModel = value));
-//  }
+  double getDy(GlobalKey key) {
+    BuildContext buildContext = key.currentContext;
+    if (buildContext == null) return null;
+    RenderBox renderBox = buildContext.findRenderObject();
+    Offset offset = renderBox.localToGlobal(Offset.zero);
+    return offset.dy;
+  }
 }
