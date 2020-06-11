@@ -4,12 +4,15 @@ import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:wanandroid/common/constant.dart';
 import 'package:wanandroid/http/http.dart';
+import 'package:wanandroid/model/base_model.dart';
+import 'package:wanandroid/model/share_model.dart';
 import 'package:wanandroid/page/article_scaffod_page.dart';
 
 import 'package:wanandroid/page/home_page.dart';
 import 'package:wanandroid/page/login_page.dart';
 import 'package:wanandroid/page/navigator_page.dart';
 import 'package:wanandroid/page/project_page.dart';
+import 'package:wanandroid/page/rank_page.dart';
 import 'package:wanandroid/page/tree_tab_page.dart';
 import 'package:wanandroid/page/wx_article_page.dart';
 import 'package:wanandroid/res.dart';
@@ -99,7 +102,6 @@ class _MainPageState extends State<MainPage> {
                               context,
                               new MaterialPageRoute(
                                   builder: (context) => new LoginPage()));
-                          print("success: $success");
                           if (success ?? false) setName();
                         },
                         child: new Container(
@@ -139,29 +141,52 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           new InkWell(
-            onTap: () =>() => Navigator.push(
-              context,
-              new MaterialPageRoute(
-                builder: (context) => ArticleScaffoldPage(
-                  "我的分享",
-                      (page) => Http().(page),
+            onTap: () => Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                    builder: (context) => ArticleScaffoldPage(
+                        "我的分享",
+                        (page) =>
+                            Http().getShareArticle(page + 1).then((value) {
+                              ShareList list = value.shareArticles;
+                              return new BaseListModel(
+                                  list.curPage,
+                                  list.datas,
+                                  list.offset,
+                                  list.over,
+                                  list.pageCount,
+                                  list.size,
+                                  list.total);
+                            })),
+                  ),
                 ),
-              ),
-            ),
             child: new ListTile(
               leading: new Icon(Icons.share),
               title: new Text("我的分享"),
             ),
           ),
           new InkWell(
-            onTap: () {},
+            onTap: () => Navigator.push(
+              context,
+              new MaterialPageRoute(
+                builder: (context) => ArticleScaffoldPage(
+                  "广场列表",
+                      (page) => Http().getAllShareArticle(page),
+                ),
+              ),
+            ),
             child: new ListTile(
               leading: new Icon(Icons.supervisor_account),
               title: new Text("广场列表"),
             ),
           ),
           new InkWell(
-            onTap: () {},
+            onTap: () => Navigator.push(
+              context,
+              new MaterialPageRoute(
+                builder: (context) => RankPage(),
+              ),
+            ),
             child: new ListTile(
               leading: new Icon(Icons.score),
               title: new Text("我的积分"),

@@ -21,7 +21,10 @@ class API {
   static const COLLECT_REMOVE_ARTICLE = 'lg/uncollect_originId';
   static const COLLECT_REMOVE_MY = 'lg/uncollect';
   static const SHARE = 'lg/user_article/add/json';
-  static const SHARE_LIST = 'lg/private_articles';
+  static const SHARE_LIST = 'user/lg/private_articles';
+  static const USER_ARTICLE = 'user_article/list';
+  static const RANK = 'coin/rank';
+  static const MY_RANK = 'lg/coin/userinfo/json';
 
   //gankio的图
   static const MEIZI = 'https://gank.io/api/v2/data/category/Girl/type/Girl/page/1/count/10';

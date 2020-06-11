@@ -12,6 +12,8 @@ import 'package:wanandroid/model/base_model.dart';
 import 'package:wanandroid/model/hot_key_model.dart';
 import 'package:wanandroid/model/meizi_model.dart';
 import 'package:wanandroid/model/navigator_model.dart';
+import 'package:wanandroid/model/rank_model.dart';
+import 'package:wanandroid/model/share_model.dart';
 import 'package:wanandroid/model/tree_model.dart';
 import 'package:wanandroid/model/user_model.dart';
 
@@ -200,12 +202,33 @@ class Http {
     return await checkResult(response, (element) => null);
   }
 
-  //自己的分享的文章列表
-  Future getShareArticle(int page) async {
+  //自己的分享的文章列表(info: page从 1 开始)
+  Future<ShareModel> getShareArticle(int page) async {
     Response response = await _dio.get('${API.SHARE_LIST}/$page/json');
-    return await checkResult(response, (element) => null);
+    return await checkResult(
+        response, (element) => ShareModel.fromJson(element));
   }
 
+  //广场列表数据
+  Future<BaseListModel<ArticleModel>> getAllShareArticle(int page) async {
+    Response response = await _dio.get('${API.USER_ARTICLE}/$page/json');
+    return await checkResult(
+        response, (element) => ArticleModel.fromJson(element));
+  }
+
+  //积分排行榜接口(info: page从 1 开始)
+  Future<BaseListModel<RankModel>> getRank(int page) async {
+    Response response = await _dio.get('${API.RANK}/$page/json');
+    return await checkResult(
+        response, (element) => RankModel.fromJson(element));
+  }
+
+  //获取个人积分，需要登录后访问
+  Future<RankModel> getMyRank() async {
+    Response response = await _dio.get(API.MY_RANK);
+    return await checkResult(
+        response, (element) => RankModel.fromJson(element));
+  }
 
   Future checkResult<T>(Response response, Format<T> format) {
     String jsonStr = jsonEncode(response.data);

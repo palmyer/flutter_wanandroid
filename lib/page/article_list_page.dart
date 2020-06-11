@@ -94,8 +94,6 @@ class _ArticleListPageState extends State<ArticleListPage>
   }
 
   Widget _itemArticle(ArticleModel model) {
-    print('id: ${model.id}');
-    print('originId: ${model.originId}');
     return new Card(
       child: new InkWell(
         onTap: () {
