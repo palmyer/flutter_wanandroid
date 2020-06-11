@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:wanandroid/common/global_config.dart';
 import 'package:wanandroid/http/http.dart';
+import 'package:wanandroid/model/base_model.dart';
 import 'package:wanandroid/model/rank_model.dart';
 
 class RankPage extends StatefulWidget {
@@ -40,7 +41,7 @@ class _RankPageState extends State<RankPage> {
             ),
             onRefresh: () async {
               doRequest(_page = 1);
-              doMyRank();
+//              doMyRank();
             },
             onLoad: () async {
               doRequest(++_page);
@@ -58,7 +59,7 @@ class _RankPageState extends State<RankPage> {
   Widget _buildItem(RankModel model, {bool single = false}) {
     return new Container(
       decoration: BoxDecoration(
-          color: single ? Colors.yellow : Colors.white,
+          color: model.select || single ? Colors.yellow : Colors.white,
           border: single
               ? null
               : const Border(bottom: BorderSide(color: GlobalConfig.color_bg))),
@@ -109,17 +110,63 @@ class _RankPageState extends State<RankPage> {
   }
 
   doRequest(int page) {
-    Http().getRank(page).then((value) {
-      if (page == 1) {
-        _page = 1;
-        _list.clear();
-      }
-      _list.addAll(value.datas);
-      _controller.finishLoad(noMore: _list.length >= value.total);
-    }).then((value) => setState(() {}));
+    if (page == 1 && _randModel == null) {
+      Future.wait([
+        Http().getRank(page).then((value) {
+          _page = 1;
+          _list.clear();
+          _list.addAll(value.datas);
+          _controller.finishLoad(noMore: _list.length >= value.total);
+          return value;
+        }),
+        Http().getMyRank().then((value) {
+          value.userId = 7710;
+          return value;
+        })
+      ]).then((value) {
+        BaseListModel<RankModel> list = value[0];
+        List<RankModel> rankList = list.datas;
+        _randModel = value[1];
+        for (RankModel model in rankList) {
+          if (model.userId == _randModel.userId) {
+            print("${model.username}");
+            model.select = true;
+          } else
+            model.select = false;
+        }
+      }).then((value) => setState(() {}));
+    } else {
+      Http().getRank(page).then((value) {
+        if (page == 1) {
+          _page = 1;
+          _list.clear();
+        }
+        _list.addAll(value.datas);
+        _controller.finishLoad(noMore: _list.length >= value.total);
+        return value;
+      }).then((value) {
+        for (RankModel model in value.datas) {
+          if (model.userId == _randModel.userId)
+            model.select = true;
+          else
+            model.select = false;
+        }
+      }).then((value) => setState(() {}));
+    }
   }
 
-  doMyRank() {
-    Http().getMyRank().then((value) => setState(() => _randModel = value));
-  }
+//  doRequest(int page) {
+//    Http().getRank(page).then((value) {
+//      if (page == 1) {
+//        _page = 1;
+//        _list.clear();
+//      }
+//      _list.addAll(value.datas);
+//      _controller.finishLoad(noMore: _list.length >= value.total);
+//    }).then((value) => setState(() {}));
+//  }
+//
+//  doMyRank() {
+//    Http().getMyRank().then((value) => setState(() => _randModel = value));
+//  }
 }
