@@ -8,7 +8,7 @@
 | <img src="screenshot/navi.png" width = "240" height = "427" alt="" align=center /> | <img src="screenshot/tree.png" width = "240" height = "427" alt="" align=center /> | <img src="screenshot/wx.png" width = "240" height = "427" alt="" align=center /> |
 | <img src="screenshot/login.png" width = "240" height = "427" alt="" align=center /> | <img src="screenshot/webview.png" width = "240" height = "427" alt="" align=center /> | <img src="screenshot/search.png" width = "240" height = "427" alt="" align=center /> |
 
-#### request
+## request
 ```
   Http().getTreeList().then((value) {
     _list.clear();
@@ -32,3 +32,6 @@
         response, (element) => ArticleModel.fromJson(element));
   }
 ```
+
+## apk
+![image](/screenshot/qr.jpg)
