@@ -72,7 +72,6 @@ class _LoginPageState extends State<LoginPage>
                             placeholder: Res.drawer_header,
                             image: _src,
                             fit: BoxFit.cover,
-                            fadeInDuration: const Duration(milliseconds: 500),
                           )),
               );
             },
